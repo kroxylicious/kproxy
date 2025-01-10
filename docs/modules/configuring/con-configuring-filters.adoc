@@ -1,0 +1,64 @@
+[id='ref-configuring-filters-{context}']
+= Defining filters
+
+There is flexibility in how to configure filters. Consider the following example:
+
+[id='con-filterDefintions-defaultFilters-{context}']
+.`filterDefinitions`, `defaultFilters` and a virtual cluster's `filters` work together
+[source,yaml]
+----
+filterDefinitions:
+  - name: encryption
+    type: RecordEncryption
+    config:
+      # ... (configuration for RecordEncryption)
+  - name: validation
+    type: RecordValidation
+    config:
+      # ... (configuration for RecordValidation)
+  - name: special-encryption
+    type: RecordEncryption
+    config:
+      # ... (configuration for RecordEncryption)
+defaultFilters:
+  - validation
+  - encryption
+virtualClusters:
+  my-proxy-with-default-filters:
+    # ... (configuration for this virtual cluster)
+  my-proxy-with-custom-filters:
+    filters:
+      - validation
+      - special-encryption
+    # ... (configuration for this virtual cluster)
+# ... (virtualClusters, etc.)
+----
+
+* The order of definitions in `filterDefinitions` does not matter.
+* Each filter definition in `filterDefinitions` must have a unique `name`, but you can have multiple definitions with the same type and different configurations (as with `encryption` and `special-encryption` in the above example).
+* The order of `defaultFilters` is the order in which the filters be applied to an incoming client request. In the above example we will validate records, and then encrypt them.
+* The `defaultFilters` will be used for all virtual clusters which don't define their own `filters`, such as `my-proxy-with-default-filters`
+* The `defaultFilters` is optional. It useful to define filters when all your virtual clusters should use the same filters. There's no need to specify it if all your virtual clusters define their own filters.
+* When a virtual cluster defines its own `filters`, like `my-proxy-with-custom-filters`, then those filters are used instead of the `defaultFilters`.
+* When you use `defaultFilters`, or a virtual cluster's `filters` to refer to a filter definition, you must have defined a filter with that name in `filterDefinitions`
+
+There is also a top level `filters` property, which accepts _anonymous_ filter definitions, without a `name`.
+
+WARNING: `filters` is deprecated and will be removed in a future version of Kroxylicious. It is recommended to update existing configurations to use `filterDefinitions` instead.
+
+[id='con-filterDefintions-defaultFilters-{context}']
+.The deprecated `filters` property
+[source,yaml]
+----
+filters: # deprecated!
+  - type: RecordEncryption
+    config:
+      # ...
+virtualClusters:
+  my-proxy-with-default-filters:
+    # ...
+----
+
+When the top level `filters` property is used it will be applied for all the virtual clusters.
+It is not allowed to specify both the top level `filters` and `filterDefinitions` properties in the same configuration.
+
