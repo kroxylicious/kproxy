@@ -1,0 +1,33 @@
+{
+  "baseBranches": ["main"],
+  "rebaseWhen": "conflicted",
+  "labels": ["dependencies"],
+  "automergeStrategy": "merge-commit",
+  "ignoreTests": true,
+  "extends": [
+    "config:recommended"
+  ],
+  "enabledManagers": [
+    "custom.regex"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["kroxylicious-kms-provider-hashicorp-vault-test-support/src/main/java/io/kroxylicious/kms/provider/hashicorp/vault/VaultTestKmsFacade.java"],
+      "matchStrings": [
+        "DockerImageName\\.parse\\(\"hashicorp/vault:(?<currentValue>\\d+\\.\\d+)\"\\)"
+      ],
+      "depNameTemplate": "hashicorp/vault",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["kroxylicious/kroxylicious-systemtests/src/main/java/io/kroxylicious/systemtests/Constants.java"],
+      "matchStrings": [
+        "kroxylicious/kcat:(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "kroxylicious/kcat",
+      "datasourceTemplate": "docker"
+    }
+  ]
+}
