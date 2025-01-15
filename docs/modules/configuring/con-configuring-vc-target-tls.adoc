@@ -13,12 +13,14 @@ This option is suitable if the target cluster is using a TLS certificate signed 
 .Example target cluster configuration for TLS
 [source,yaml]
 ----
+# ... (filterDefinitions, defaultFilters etc)
 virtualClusters:
   my-cluster-proxy:
+    # ... (clusterNetworkAddressConfigProvider, tls etc)
     targetCluster:
       bootstrapServers: my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9093
-      tls: {}                                         
-      #...
+      tls: {}
+# ...
 ----
 
 If it is using a TLS certificate signed by a private CA, you must add truststore configuration for the target cluster.
@@ -26,8 +28,10 @@ If it is using a TLS certificate signed by a private CA, you must add truststore
 .Example truststore configuration for a target cluster
 [source,yaml]
 ----
+# ... (filterDefinitions, defaultFilters etc)
 virtualClusters:
   my-cluster-proxy:
+    # ... (clusterNetworkAddressConfigProvider, tls etc)
     targetCluster:
       bootstrapServers: my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9093
       tls:
@@ -35,8 +39,8 @@ virtualClusters:
           storeFile: <path>/trust.p12 # <1>                
           storePassword:
             passwordFile: <path>/store.password # <2>    
-          storeType: PKCS12 # <3>                             
-      #...
+          storeType: PKCS12 # <3>
+# ...
 ----
 <1> PKCS #12 store for the public CA certificate of the Kafka cluster.
 <2> Password to access the public Kafka cluster CA certificate.
@@ -47,8 +51,10 @@ For mTLS, you can add keystore configuration for the virtual cluster too.
 .Example keystore and truststore configuration for mTLS
 [source,yaml]
 ----
+# ... (filterDefinitions, defaultFilters etc)
 virtualClusters:
   my-cluster-proxy:
+    # ... (clusterNetworkAddressConfigProvider, tls etc)
     targetCluster:
       bootstrapServers: my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9093:9092
       tls:
@@ -68,12 +74,14 @@ For the purposes of testing outside of a production environment, you can set the
 .Example  configuration to turn off TLS
 [source,yaml]
 ----
+# ... (filterDefinitions, defaultFilters etc)
 virtualClusters:
   my-cluster-proxy:
+    # ... (clusterNetworkAddressConfigProvider, tls etc)
     targetCluster:
       bootstrapServers: myprivatecluster:9092
       tls:
         trust:
-          insecure: true                                
-      #...
+          insecure: true
+# ...
 ----

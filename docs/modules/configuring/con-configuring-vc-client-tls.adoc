@@ -18,8 +18,10 @@ NOTE: TLS is recommended on Kafka clients and virtual clusters for production co
 .Example PKCS #12 configuration
 [source,yaml]
 ----
+# ... (filterDefinitions, defaultFilters etc)
 virtualClusters:
   my-cluster-proxy:
+    # ... (targetCluster, clusterNetworkAddressConfigProvider etc)
     tls:
       key:
         storeFile: <path>/server.p12  # <1>             
@@ -29,6 +31,7 @@ virtualClusters:
           passwordFile: <path>/key.password # <3>       
         storeType: PKCS12 # <4>                            
       # ...
+# ...
 ----
 <1> PKCS #12 store containing the private-key and certificate/intermediates of the virtual cluster.
 <2> Password to protect the PKCS #12 store.
@@ -38,15 +41,17 @@ virtualClusters:
 .Example PEM configuration
 [source,yaml]
 ----
+# ... (filterDefinitions, defaultFilters etc)
 virtualClusters:
   my-cluster-proxy:
+    # ... (targetCluster, clusterNetworkAddressConfigProvider etc)
     tls:
       key:
         privateKeyFile: <path>/server.key   # <1>       
         certificateFile: <path>/server.crt # <2> 
         keyPassword:
           passwordFile: <path>/key.password # <3>
-# …
+# ...
 ----
 <1> Private key of the virtual cluster.
 <2> Public certificate of the virtual cluster.
@@ -59,8 +64,10 @@ If verification fails, the client's connection is refused.
 .Example to configure TLS client authentication using PKCS12 trust store
 [source,yaml]
 ----
+# ... (filterDefinitions, defaultFilters etc)
 virtualClusters:
   demo:
+    # ... (targetCluster, clusterNetworkAddressConfigProvider etc)
     tls:
       key:
         # ...
@@ -71,7 +78,7 @@ virtualClusters:
         storeType: PKCS12 # <3>
         trustOptions:
           clientAuth: REQUIRED # <4>
-# …
+# ...
 ----
 <1> PKCS #12 store containing CA certificate(s) used to verify that the client's certificate is trusted.
 <2> (Optional) Password to protect the PKCS #12 store.
