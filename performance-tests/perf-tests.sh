@@ -263,7 +263,8 @@ if [ "$(uname)" != 'Darwin' ]; then
 fi
 ON_SHUTDOWN+=("deleteAsyncProfilerKroxy")
 
-runDockerCompose up --detach --wait kafka
+runDockerCompose up --detach
+#runDockerCompose up --detach --wait kafka
 
 # Warm up the broker - we do this separately as we might want a longer warm-up period
 doCreateTopic broker1:9092 warmup-topic
