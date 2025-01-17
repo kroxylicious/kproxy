@@ -1,0 +1,36 @@
+[id='con-configuration-outline-{context}']
+= Outline of a Kroxylicious configuration
+
+[role="_abstract"]
+The following example shows the overall outline of a simple Kroxylicious configuration. It's not complete (all the occurrences of `# ...`  elide important details), but is intended to show the basic and essential structure.
+
+[id='con-basic-structure-{context}']
+.Outline structure of a Kroxylicious configuration
+[source,yaml]
+----
+filterDefinitions: # <1>
+  - name: example # <2>
+    type: org.example.filter.Example # <3>
+    config: # <4>
+      # ...
+defaultFilters: <5>
+  - example
+virtualClusters: # <6>
+  my-cluster-proxy:
+    targetCluster: # <7>
+      # ...
+    clusterNetworkAddressConfigProvider: # <8>
+      # ...
+# ...
+----
+<1> A list of named filter definitions.
+<2> A filter definition called `example`. The definitions must each have a unique name.
+<3> The name of the filter class implementation for the `example` filter. Required.
+<4> The configuration for the `example` filter instance. Usually required.
+<5> The filters that should be used by default (it's possible to override this list on a per-virtual cluster).
+<6> The virtual clusters. The properties of this object are the names of virtual clusters and the values are the virtual cluster configurations.
+<7> Configuration of the (real) Kafka cluster that will be proxied by the 'my-cluster-proxy' virtual cluster.
+<8> Configuration of the networking model for this virtual cluster.
+
+The following sections will go into more depth on each of these properties.
+
